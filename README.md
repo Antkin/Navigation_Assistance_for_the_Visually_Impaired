@@ -5,7 +5,7 @@ Over 1.5 million Canadians and around 300 million people worldwide suffer from v
 The work described here, along with the code in this repository, focuses on the task of __intersection crossing guidance__, an essential part of the global navigation system. 
 
 ## Credit
-Initial code development for the intersetion-crossing code by Roger Girgis, currently a Ph.D. student at MILA
+Initial code development for the intersetion-crossing app (Android_App/WSApplication) by Roger Girgis, currently a Ph.D. student at MILA
 
 ## Repo description 📝
 NOTE: for each sub-task/item, the corresponding code is given in the form of both separate functions (separate Python files) and a comprehensive Jupyter Notebook structured sequentially. Code should be ran in an appropriate virtual environment set-up with the necessary dependencies (see  Deep Learning section).
