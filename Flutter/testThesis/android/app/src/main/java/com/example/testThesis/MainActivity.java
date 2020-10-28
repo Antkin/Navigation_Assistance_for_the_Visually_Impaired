@@ -107,7 +107,8 @@ public class MainActivity extends FlutterActivity implements SensorEventListener
         SensorManager.getOrientation(mRotationMatrix, mOrientationAngles);
                                 mInitX = (float) (mOrientationAngles[0]*180.0F/Math.PI);
                                 //LOGGER.i("orientationAngles",mOrientationAngles);
-                                // Log.i(TAG,"mInitX: "+ mInitX);
+                                 Log.i(TAG,"mInitX: "+ mInitX);
+                                 Log.i(TAG,"batterylevel: "+batteryLevel);
                                 // Log.i(TAG,"orientation: "+mOrientationAngles[0]+mOrientationAngles[1]+mOrientationAngles[2]);
                                 // Log.i(TAG,"matrix:"+mRotationMatrix[0]+mRotationMatrix[1]+mRotationMatrix[2]+mRotationMatrix[3]);
         batteryLevel = mInitX;

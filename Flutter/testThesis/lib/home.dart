@@ -187,12 +187,13 @@ class _HomePageState extends State<HomePage> {
                       child: Text(ssd, style: TextStyle(fontSize: 25.0)),
                       onPressed: () {
                         //_playVoice();
-                        //_getBatteryLevel();
-                        // _playVoice();
-                        // _playRotation();
-                        onSelect(ssd);
+                        _getBatteryLevel();
+                        _playVoice();
+                        _playRotation();
+                        // onSelect(ssd);
                         Future.delayed(Duration(seconds: 1), () {
                           _getBatteryLevel();
+                          onSelect(ssd);
                           print(
                               "The battery level is:                                 $_batteryLevel");
                         });

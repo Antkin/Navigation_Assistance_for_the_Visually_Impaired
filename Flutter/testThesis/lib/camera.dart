@@ -35,39 +35,17 @@ double pt_pred = 0.8;
 double K_pred = 0.0;
 double Q_pred = 0.01;
 double R_meas_pred = 0.8;
+double xt = 0.0;
+double pt = 0.5;
+double K = 0.0;
+double Q = 0.01;
+double R_meas = 1.0;
 int kalmanUnknownCounter = 0;
 int flag = 0;
 var _temp;
 String text = "Rotate Slower ";
 String text_orientation =
     "Correct heading determined, when you know it is safe begin " + "Crossing.";
-
-double applyKalmanFilterForPrediction(double predictedValue) {
-  if (predictedValue != 0.0) {
-    pt_pred = pt_pred + Q_pred;
-    K_pred = pt_pred / (pt_pred + R_meas_pred);
-    xt_pred = xt_pred + K_pred * (predictedValue - xt_pred);
-    pt_pred = pt_pred * (1.0 - K_pred);
-    // print(K_pred);
-    // print(pt_pred);
-    // print(xt_pred);
-    // print(predictedValue);
-    kalmanUnknownCounter = 0;
-  } else {
-    kalmanUnknownCounter++;
-  }
-
-  // print("Kalman Filter for Prediction: Rounded Prediction =");
-  // print((xt_pred).roundToDouble());
-  // print("Kalman Filter for Prediction: UnknownCounter =");
-  // print(kalmanUnknownCounter);
-  if (kalmanUnknownCounter >= 3) {
-    // print("Kalman Filter for Prediction: Here, returning 0");
-    return 0;
-  }
-
-  return xt_pred.roundToDouble();
-}
 
 class _CameraState extends State<Camera> {
   CameraController controller;
@@ -87,18 +65,84 @@ class _CameraState extends State<Camera> {
 
   static const platform = const MethodChannel('samples.flutter.dev/battery');
   String _batteryLevel = 'Unknown battery level.';
+  double _mX = 0.0;
+  double mInitX = 0.0;
+  int mPrediction = 0;
+  int deviationAmount;
+  void obtainPredictionFromAngles() {
+    //mPrediction = 4;
+
+    if (((_mX - mInitX).abs() > 3.0) && ((_mX - mInitX).abs() < 8.0)) {
+      deviationAmount = 1;
+    } else if (((_mX - mInitX).abs() > 8.0) && ((_mX - mInitX).abs() < 12.0)) {
+      deviationAmount = 2;
+    } else if ((_mX - mInitX).abs() > 12.0) {
+      deviationAmount = 3;
+    } else {
+      deviationAmount = 0;
+    }
+
+    if (_mX - mInitX < 0.0) {
+      mPrediction = mPrediction + deviationAmount;
+    } else {
+      mPrediction = mPrediction - deviationAmount;
+    }
+    print("prediction for gyro $mPrediction");
+  }
+
+  double applyKalmanFilterForPrediction(double predictedValue) {
+    if (predictedValue != 0.0) {
+      pt_pred = pt_pred + Q_pred;
+      K_pred = pt_pred / (pt_pred + R_meas_pred);
+      xt_pred = xt_pred + K_pred * (predictedValue - xt_pred);
+      pt_pred = pt_pred * (1.0 - K_pred);
+      kalmanUnknownCounter = 0;
+    } else {
+      kalmanUnknownCounter++;
+    }
+
+    if (kalmanUnknownCounter >= 3) {
+      return 0;
+    }
+
+    return xt_pred.roundToDouble();
+  }
+
+  double applyKalmanFilterForAngle(double angle) {
+    pt = pt + Q;
+    K = pt / (pt + R_meas);
+    xt = xt + K * (angle - xt);
+    pt = pt * (1.0 - K);
+    return xt;
+  }
 
   Future<void> _getBatteryLevel() async {
     String batteryLevel;
+    double result;
     try {
-      final double result = await platform.invokeMethod('getBatteryLevel');
+      result = await platform.invokeMethod('getBatteryLevel');
       batteryLevel = 'Battery level at $result % .';
     } on PlatformException catch (e) {
       batteryLevel = "Failed to get battery level: '${e.message}'.";
     }
 
     setState(() {
-      _batteryLevel = batteryLevel;
+      mInitX = result;
+    });
+  }
+
+  Future<void> _getBatteryLevelForMx() async {
+    String batteryLevel;
+    double result;
+    try {
+      result = await platform.invokeMethod('getBatteryLevel');
+      batteryLevel = 'Battery level at $result % .';
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to get battery level: '${e.message}'.";
+    }
+
+    setState(() {
+      _mX = result;
     });
   }
 
@@ -154,7 +198,8 @@ class _CameraState extends State<Camera> {
               setState(() {
                 _getBatteryLevel();
                 print(
-                    "On new page with battery level of :                $_batteryLevel");
+                    "On new page with battery level of :                $mInitX");
+                print("Count is :        $useModelCounter");
                 if (rotationSpeed > 30) {
                   _voiceController.init().then((_) {
                     _voiceController.speak(
@@ -163,30 +208,40 @@ class _CameraState extends State<Camera> {
                     );
                   });
                 }
-                _temp = 4;
-                if (_temp > 4 && flag == 1) {
-                  audioCache.play("continual.wav");
-                } else if (_temp <= 3 && flag == 1) {
-                  audioCache.play("continual_right.wav");
-                } else if (_temp == 4) {
-                  if (_temp == 4) {
-                    useModelCounter++;
-                    //useModelCounter = 0; // in order to use the model only for predictions
-                  } else {
-                    useModelCounter = 0;
+                if (useModelCounter < totalCount) {
+                  _temp = 4;
+                  if (_temp > 4 && flag == 1) {
+                    audioCache.play("continual.wav");
+                  } else if (_temp <= 3 && flag == 1) {
+                    audioCache.play("continual_right.wav");
+                  } else if (_temp == 4) {
+                    if (_temp == 4) {
+                      useModelCounter++;
+                      //useModelCounter = 0; // in order to use the model only for predictions
+                    } else {
+                      useModelCounter = 0;
+                    }
                   }
                 }
-                if (useModelCounter == totalCount) {
-                  // Recording something in file to say we switched from model to IMU
-
-                  _getBatteryLevel();
-
-                  _voiceController.init().then((_) {
-                    _voiceController.speak(
-                      text_orientation,
-                      VoiceControllerOptions(),
-                    );
-                  });
+                if (useModelCounter >= totalCount) {
+                  if (flag == 1) {
+                    flag = 2;
+                    _voiceController.init().then((_) {
+                      _voiceController.speak(
+                        text_orientation,
+                        VoiceControllerOptions(),
+                      );
+                    });
+                  } else if (flag == 2) {
+                    flag = 3;
+                    Future.delayed(Duration(seconds: 4), () {
+                      _getBatteryLevelForMx();
+                      print("mX value is :               $_mX");
+                    });
+                  } else if (flag == 3) {
+                    _mX = applyKalmanFilterForAngle(_mX);
+                    obtainPredictionFromAngles();
+                  }
                 }
               });
 
