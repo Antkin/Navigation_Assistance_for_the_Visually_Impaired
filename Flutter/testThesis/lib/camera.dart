@@ -8,6 +8,7 @@ import 'dart:math' as math;
 import 'package:all_sensors/all_sensors.dart';
 import 'package:flutter/services.dart';
 import "dart:async";
+import 'package:flutter/gestures.dart';
 
 var now = new List();
 var sub = new List();
