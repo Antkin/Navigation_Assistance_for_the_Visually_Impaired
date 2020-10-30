@@ -46,3 +46,9 @@ In order for the Deep Learning model to be successfully ported to the current An
 - (Re)trained models must be compatible with/obtained from Tensorflow versions ≤ 1.13 
 - The Frozen graph of the model must be generated and used
 
+### Flutter Logic
+In order to use the Flutter code navigate to the flutter folder. Follow the path Flutter -> testThesis. Once inside testThesis run the command "flutter run". The app should be deployed on your Android Phone
+
+Pre-requisites:
+Working Flutter framewok on local PC(https://flutter.dev/docs/get-started/install)
+
