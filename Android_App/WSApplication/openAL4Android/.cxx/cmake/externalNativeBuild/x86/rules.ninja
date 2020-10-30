@@ -23,7 +23,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake -H/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android -B/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/externalNativeBuild/x86
+  command = C:\Users\91966\AppData\Local\Android\Sdk\cmake\3.10.2.4988404\bin\cmake.exe -HC:\Users\91966\Desktop\gitRepos\visually_impaired\Android_App\WSApplication\openAL4Android -BC:\Users\91966\Desktop\gitRepos\visually_impaired\Android_App\WSApplication\openAL4Android\.cxx\cmake\externalNativeBuild\x86
   description = Re-running CMake...
   generator = 1
 
@@ -32,7 +32,7 @@ rule RERUN_CMAKE
 # Rule for cleaning all built files.
 
 rule CLEAN
-  command = /Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -t clean
+  command = C:\Users\91966\AppData\Local\Android\Sdk\cmake\3.10.2.4988404\bin\ninja.exe -t clean
   description = Cleaning all built files...
 
 
@@ -40,6 +40,6 @@ rule CLEAN
 # Rule for printing all primary targets available.
 
 rule HELP
-  command = /Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -t targets
+  command = C:\Users\91966\AppData\Local\Android\Sdk\cmake\3.10.2.4988404\bin\ninja.exe -t targets
   description = All primary targets available:
 

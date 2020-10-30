@@ -5,8 +5,8 @@
 5    android:versionName="1.0" > <!-- <uses-sdk android:minSdkVersion="4" /> -->
 6    <uses-sdk
 7        android:minSdkVersion="4"
-7-->/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/src/main/AndroidManifest.xml
+7-->C:\Users\91966\Desktop\gitRepos\visually_impaired\Android_App\WSApplication\openAL4Android\src\main\AndroidManifest.xml
 8        android:targetSdkVersion="4" />
-8-->/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/src/main/AndroidManifest.xml
+8-->C:\Users\91966\Desktop\gitRepos\visually_impaired\Android_App\WSApplication\openAL4Android\src\main\AndroidManifest.xml
 9
 10</manifest>

@@ -69,9 +69,9 @@ class _CameraState extends State<Camera> {
   double mInitX = 0.0;
   int mPrediction = 0;
   int deviationAmount;
-  void obtainPredictionFromAngles() {
-    //mPrediction = 4;
-
+  int obtainPredictionFromAngles() {
+    mPrediction = 0;
+    double value = (_mX - mInitX).abs();
     if (((_mX - mInitX).abs() > 3.0) && ((_mX - mInitX).abs() < 8.0)) {
       deviationAmount = 1;
     } else if (((_mX - mInitX).abs() > 8.0) && ((_mX - mInitX).abs() < 12.0)) {
@@ -87,7 +87,9 @@ class _CameraState extends State<Camera> {
     } else {
       mPrediction = mPrediction - deviationAmount;
     }
+    print("$value");
     print("prediction for gyro $mPrediction");
+    return mPrediction;
   }
 
   double applyKalmanFilterForPrediction(double predictedValue) {
@@ -102,6 +104,7 @@ class _CameraState extends State<Camera> {
     }
 
     if (kalmanUnknownCounter >= 3) {
+      print("Kalman Filter for Prediction: Here, returning = 0");
       return 0;
     }
 
@@ -196,19 +199,20 @@ class _CameraState extends State<Camera> {
               rotationSpeed = ((_gyroscopeValues[0] * 180.0) / math.pi).abs();
               //print("rotationspeed is: $rotationSpeed");
               setState(() {
-                _getBatteryLevel();
-                print(
-                    "On new page with battery level of :                $mInitX");
-                print("Count is :        $useModelCounter");
-                if (rotationSpeed > 30) {
-                  _voiceController.init().then((_) {
-                    _voiceController.speak(
-                      text,
-                      VoiceControllerOptions(),
-                    );
-                  });
-                }
+                _getBatteryLevelForMx();
+                // print(
+                //     "On new page with battery level of :                $mInitX");
+                // print("Count is :        $useModelCounter");
                 if (useModelCounter < totalCount) {
+                  if (rotationSpeed > 30) {
+                    _voiceController.init().then((_) {
+                      _voiceController.speak(
+                        text,
+                        VoiceControllerOptions(),
+                      );
+                    });
+                  }
+
                   _temp = 4;
                   if (_temp > 4 && flag == 1) {
                     audioCache.play("continual.wav");
@@ -226,6 +230,8 @@ class _CameraState extends State<Camera> {
                 if (useModelCounter >= totalCount) {
                   if (flag == 1) {
                     flag = 2;
+                    _getBatteryLevel();
+                    //_getBatteryLevelForMx();
                     _voiceController.init().then((_) {
                       _voiceController.speak(
                         text_orientation,
@@ -233,14 +239,21 @@ class _CameraState extends State<Camera> {
                       );
                     });
                   } else if (flag == 2) {
-                    flag = 3;
                     Future.delayed(Duration(seconds: 4), () {
-                      _getBatteryLevelForMx();
-                      print("mX value is :               $_mX");
+                      flag = 3;
+                      //_getBatteryLevelForMx();
+                      print("minitX value is :               $_mX");
                     });
                   } else if (flag == 3) {
+                    _getBatteryLevelForMx();
                     _mX = applyKalmanFilterForAngle(_mX);
-                    obtainPredictionFromAngles();
+                    print("mX value is:  $_mX");
+                    _temp = obtainPredictionFromAngles();
+                    if (_temp < 0) {
+                      audioCache.play("continual.wav");
+                    } else if (_temp > 0) {
+                      audioCache.play("continual_right.wav");
+                    }
                   }
                 }
               });

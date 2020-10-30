@@ -59,6 +59,7 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
     private Classifier unknownClassifier;
     private Matrix frameToCropTransform;
     private Matrix cropToFrameTransform;
+    private boolean mLastAccelerometerSet = false;
 
     private static final boolean MAINTAIN_ASPECT = false;
 
@@ -78,7 +79,7 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
     private static final String OUTPUT_NAME_UNK = "act_softmax/Softmax";
 //    private static final String MODEL_FILE_UNK = "file:///android_asset/Mobilenet_8.pb";
     private static final String MODEL_FILE_UNK = "file:///android_asset/run2.pb";
-
+    private float xAccel;
     private static final int IMAGE_MEAN_UNK = 1;
     private static final float IMAGE_STD_UNK = 0;
     private static final String LABEL_FILE_UNK = "file:///android_asset/classes.8.txt";
@@ -102,7 +103,7 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
     private SensorManager mSensorManager;
     Handler handler = new Handler();
     int useModelCounter = 0;
-    int totalCOUNT = 10;
+    int totalCOUNT = 2;
     private final float[] mRotationVectorReading = new float[3];
     private final float[] mRotationMatrix = new float[9];
     private final float[] mOrientationAngles = new float[3];
@@ -304,94 +305,114 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                List<Classifier.Recognition> results = null;
+                List<Classifier.Recognition> unkResults = null;
                 if (mSpeakIntro == 0){
                     if (Integer.parseInt(folderNumber) == 0) {
-                        speak("Rotate away from the auditory cues as slowly as possible, " +
-                                "If no sound is produced, it means you are correctly oriented. ");
+                        //speak("Rotate away from the auditory cues as slowly as possible, " +
+                        //        "If no sound is produced, it means you are correctly oriented. ");
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException ex) {
                             android.util.Log.d("WSApplication",
                                     ex.toString());
                         }
-                        //playTutorial();
+      //                   playTutorial();
                     }
 
-                    speak("Please begin slowly rotating while I determine " +
-                            "the correct heading.");
+                    //speak("Please begin slowly rotating while I determine " +
+                    //       "the correct heading.");
                     try { Thread.sleep(200); }
                     catch (InterruptedException ex) { android.util.Log.d("WSApplication",
                             ex.toString());}
                     mSpeakIntro++;
                     lastPlayed = 0;
+
                 }
 
-                List<Classifier.Recognition> results = null;
-                List<Classifier.Recognition> unkResults = null;
-                mPrediction = 0;
-//                if (useModelCounter < totalCOUNT) {  // Use the model for predictions
+                if (xAccel > -2 && xAccel < 2) {
+                    csv_data.add(xAccel);
+                    /*List<Classifier.Recognition> results = null;
+                    List<Classifier.Recognition> unkResults = null;*/
+                    mPrediction = 0;
+                    if (useModelCounter < totalCOUNT) {  // Use the model for predictions
 
-                startTime = SystemClock.uptimeMillis();
+                        startTime = SystemClock.uptimeMillis();
 
-                if (MODEL_TYPE == 0) {
-                    results = classifier.recognizeImage(croppedBitmap, MODEL_TYPE);
-                    resultsFloat = Float.parseFloat(results.get(0).getId());
-                } else if (MODEL_TYPE == 1) {
-                    unknownCounter++;
-                    if (unknownBool == 1 || unknownCounter >= UNKNOWN_THRESHOLD) {
-                        unkResults = unknownClassifier.recognizeImage(croppedBitmap, 0);
-                        if (Integer.parseInt(unkResults.get(0).getId()) == 0) {
-                            resultsFloat = 0.0F;
-                            unknownBool = 1;
-                        } else {
-                            unknownBool = 0;
+                        if (MODEL_TYPE == 0) {
+                            results = classifier.recognizeImage(croppedBitmap, MODEL_TYPE);
+                            resultsFloat = Float.parseFloat(results.get(0).getId());
+                        } else if (MODEL_TYPE == 1) {
+                            unknownCounter++;
+                            if (unknownBool == 1 || unknownCounter >= UNKNOWN_THRESHOLD) {
+                                unkResults = unknownClassifier.recognizeImage(croppedBitmap, 0);
+                                if (Integer.parseInt(unkResults.get(0).getId()) == 0) {
+                                    resultsFloat = 0.0F;
+                                    unknownBool = 1;
+                                } else {
+                                    unknownBool = 0;
+                                }
+                                unknownCounter = 0;
+                            }
+                            if (unknownBool == 0) {
+                                results = classifier.recognizeImage(croppedBitmap, 1);
+                                resultsFloat = results.get(0).getConfidence() + 1.0F;
+                                if (resultsFloat > 7.0F) {
+                                    resultsFloat = 7.0F;
+                                }
+                            }
                         }
-                        unknownCounter = 0;
+
+                        lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
+                        LOGGER.i("Detect: %s", results);
+                        LOGGER.i("Total Detection Time: " + lastProcessingTimeMs);
+
+                        csv_data.add(resultsFloat);
+                        mPrediction = (int) applyKalmanFilterForPrediction(resultsFloat);
+                        LOGGER.i("Filtered Prediction: %s", mPrediction);
+                        csv_data.add((float) mPrediction);
+                        mPrediction = 4;
+                        evaluateModelResult(mPrediction);
+                        LOGGER.i("Counter: %d",useModelCounter);
+
+                    } else {  // Start using Gyroscope for position
+                        LOGGER.i("p  : %s",mPrediction);
+                        //updateOrientationAngles();
+                       // mInitX = (float) (mOrientationAngles[0]*180.0F/Math.PI);
+                        LOGGER.i("minit: %s",mInitX);
+                        mX = applyKalmanFilterForAngle((float) (mOrientationAngles[0] * 180.0F / Math.PI));
+                        csv_data.add(mX);
+                        LOGGER.i("mX: %s",mX);
+                        obtainPredictionFromAngles();
+                        csv_data.add((float) mPrediction);
+                        LOGGER.i("Prediction: %s", mPrediction);
                     }
-                    if (unknownBool == 0) {
-                        results = classifier.recognizeImage(croppedBitmap, 1);
-                        resultsFloat = results.get(0).getConfidence() + 1.0F;
-                        if (resultsFloat > 7.0F) {
-                            resultsFloat = 7.0F;
-                        }
-                    }
+                    playSound(mPrediction);
+
+                    // Save IMU data in a csv file with the accompanying image
+                    cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
+                    requestRender();
+                    readyForNextImage();
+                    ImageUtils.saveBitmap(croppedBitmap, IMG_NUMBER, folderNumber);
+                    IMG_NUMBER++;
+
                 }
 
-                lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
-                LOGGER.i("Detect: %s", results);
-                LOGGER.i("Total Detection Time: " + lastProcessingTimeMs);
 
-                csv_data.add(resultsFloat);
-                mPrediction = (int) applyKalmanFilterForPrediction(resultsFloat);
-                LOGGER.i("Filtered Prediction: %s", mPrediction);
-                csv_data.add((float) mPrediction);
-                evaluateModelResult(mPrediction);
-//                }
-//                } else {  // Start using Gyroscope for position
-//                    updateOrientationAngles();
-//                    mX = applyKalmanFilterForAngle((float) (mOrientationAngles[0] * 180.0F / Math.PI));
-//                    csv_data.add(mX);
-//                    obtainPredictionFromAngles();
-//                    csv_data.add((float) mPrediction);
-//                    LOGGER.i("Prediction: %s", mPrediction);
-//                }
+                else {
+                    readyForNextImage();
+                }
 
-                playSound(mPrediction);
-
-                // Save IMU data in a csv file with the accompanying image
-                cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
-                requestRender();
-                readyForNextImage();
-                ImageUtils.saveBitmap(croppedBitmap, IMG_NUMBER, folderNumber);
-                IMG_NUMBER++;
 
                 // Display model's result
                 if (resultsView == null) {
                     resultsView = findViewById(R.id.results);
                 }
+                //resultsView.setResults(R.id.results);
                 resultsView.setResults(results);
             }
         };
+
         handler.postDelayed(r, 800);
         //});
     }
@@ -411,7 +432,7 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
 
     private void obtainPredictionFromAngles() {
         LOGGER.i("mX: %f", mX);
-        mPrediction = 4;
+        //mPrediction = 4;
 
         if ((Math.abs(mX - mInitX) > 3.0) && (Math.abs(mX - mInitX) < 8.0)){
             deviationAmount = 1;
@@ -428,12 +449,14 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
         } else{
             mPrediction = mPrediction - deviationAmount;
         }
+        LOGGER.i("mprediction: %s",mPrediction);
     }
 
     private void evaluateModelResult(int predictedValue){
+        predictedValue =4;
         if (predictedValue == 4) {
-//            useModelCounter++;
-            useModelCounter = 0; // in order to use the model only for predictions
+            useModelCounter++;
+            //useModelCounter = 0; // in order to use the model only for predictions
         } else {
             useModelCounter = 0;
         }
@@ -453,6 +476,12 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            //System.arraycopy(event.values, 0, mLastAccelerometer, 0, sensorEvent.values.length);
+            mLastAccelerometerSet = true;
+        }
+
         if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR) {
             System.arraycopy(event.values, 0, mRotationVectorReading,
                     0, mRotationVectorReading.length);
@@ -561,6 +590,7 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
 
 
     public float applyKalmanFilterForPrediction(Float predictedValue) {
+        //predictedValue = 4;
         if (predictedValue != 0.0F) {
             pt_pred = pt_pred + Q_pred;
             K_pred = pt_pred / (pt_pred + R_meas_pred);
@@ -573,8 +603,8 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
             kalmanUnknownCounter++;
         }
 
-        LOGGER.i("Kalman Filter for Prediction: Rounded Prediction = %s", Math.round(xt_pred));
-        LOGGER.i("Kalman Filter for Prediction: UnknownCounter = %s", kalmanUnknownCounter);
+        /*LOGGER.i("Kalman Filter for Prediction: Rounded Prediction = %s", Math.round(xt_pred));
+        LOGGER.i("Kalman Filter for Prediction: UnknownCounter = %s", kalmanUnknownCounter);*/
         if (kalmanUnknownCounter >= 3) {
             LOGGER.i("Kalman Filter for Prediction: Here, returning = %s", 0);
             return 0;
@@ -654,14 +684,19 @@ public class WSActivity extends CameraActivity implements OnImageAvailableListen
             if(lastPlayed == 1) {
                 this.sound.stop();
                 this.unknownSound.play(true);
+                LOGGER.i("in number one point one");
             }
+            LOGGER.i("in number one");
             lastPlayed = 0;
         } else {
             if(lastPlayed == 0) {
                 this.sound.play(true);
                 this.unknownSound.stop();
+                LOGGER.i("in number two point one");
             }
+            LOGGER.i("in number two");
             lastPlayed = 1;
+
         }
     }
 

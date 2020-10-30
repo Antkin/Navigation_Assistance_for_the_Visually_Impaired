@@ -1,8 +1,8 @@
-# Install script for directory: /Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android
+# Install script for directory: C:/Users/91966/Desktop/gitRepos/visually_impaired/Android_App/WSApplication/openAL4Android
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Project")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/externalNativeBuild/x86/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/91966/Desktop/gitRepos/visually_impaired/Android_App/WSApplication/openAL4Android/.cxx/cmake/externalNativeBuild/x86/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

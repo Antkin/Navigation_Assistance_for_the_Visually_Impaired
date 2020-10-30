@@ -5,9 +5,9 @@
     "environmentVariables": []
   },
   "cmake": {
-    "cmakeArtifactsBaseFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/x86",
-    "cmakeServerLogFile": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/x86/cmake_server_log.txt",
-    "cmakeWrappingBaseFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cxx/release/x86",
+    "cmakeArtifactsBaseFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\x86",
+    "cmakeServerLogFile": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\x86\\cmake_server_log.txt",
+    "cmakeWrappingBaseFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cxx\\release\\x86",
     "effectiveConfiguration": {
       "name": "traditional-android-studio-cmake-environment",
       "description": "Composite reified CMakeSettings configuration",
@@ -15,13 +15,13 @@
       "inheritEnvironments": [
         "ndk"
       ],
-      "buildRoot": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/x86",
-      "cmakeToolchain": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake",
-      "cmakeExecutable": "/Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake",
+      "buildRoot": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\x86",
+      "cmakeToolchain": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\android.toolchain.cmake",
+      "cmakeExecutable": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe",
       "variables": [
         {
           "name": "CMAKE_FIND_ROOT_PATH",
-          "value": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/prefab/x86/prefab"
+          "value": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\prefab\\x86\\prefab"
         },
         {
           "name": "CMAKE_BUILD_TYPE",
@@ -29,7 +29,7 @@
         },
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake"
+          "value": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\android.toolchain.cmake"
         },
         {
           "name": "ANDROID_ABI",
@@ -37,7 +37,7 @@
         },
         {
           "name": "ANDROID_NDK",
-          "value": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669"
+          "value": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669"
         },
         {
           "name": "ANDROID_PLATFORM",
@@ -49,7 +49,7 @@
         },
         {
           "name": "CMAKE_ANDROID_NDK",
-          "value": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669"
+          "value": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669"
         },
         {
           "name": "CMAKE_EXPORT_COMPILE_COMMANDS",
@@ -57,11 +57,11 @@
         },
         {
           "name": "CMAKE_LIBRARY_OUTPUT_DIRECTORY",
-          "value": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/build/intermediates/cmake/release/obj/x86"
+          "value": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\build\\intermediates\\cmake\\release\\obj\\x86"
         },
         {
           "name": "CMAKE_MAKE_PROGRAM",
-          "value": "/Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja"
+          "value": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe"
         },
         {
           "name": "CMAKE_SYSTEM_NAME",
@@ -74,14 +74,14 @@
       ]
     }
   },
-  "cxxBuildFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/x86",
+  "cxxBuildFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\x86",
   "info": {
     "abi": "X86",
     "bitness": 32,
     "deprecated": false,
     "default": true
   },
-  "originalCxxBuildFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/x86",
+  "originalCxxBuildFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\x86",
   "variant": {
     "buildSystemArgumentList": [],
     "buildTargetSet": [],
@@ -92,22 +92,22 @@
     "module": {
       "buildSystem": "CMAKE",
       "cmake": {
-        "cmakeExe": "/Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake",
+        "cmakeExe": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe",
         "minimumCmakeVersion": "3.10.2",
-        "ninjaExe": "/Users/nathanpollet/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja"
+        "ninjaExe": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe"
       },
-      "cmakeToolchainFile": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/build/cmake/android.toolchain.cmake",
-      "cxxFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx",
+      "cmakeToolchainFile": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\build\\cmake\\android.toolchain.cmake",
+      "cxxFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx",
       "gradleModulePathName": ":openAL4Android",
-      "intermediatesFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/build/intermediates",
-      "makeFile": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/CMakeLists.txt",
-      "moduleBuildFile": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/build.gradle",
-      "moduleRootFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android",
+      "intermediatesFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\build\\intermediates",
+      "makeFile": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\CMakeLists.txt",
+      "moduleBuildFile": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\build.gradle",
+      "moduleRootFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android",
       "ndkDefaultAbiList": [
         "ARMEABI_V7A",
         "X86"
       ],
-      "ndkFolder": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669",
+      "ndkFolder": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669",
       "ndkMetaAbiList": [
         {
           "abi": "ARMEABI_V7A",
@@ -162,36 +162,36 @@
       "ndkDefaultStl": "LIBCXX_STATIC",
       "ndkVersion": "21.0.6113669",
       "project": {
-        "compilerSettingsCacheFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/.cxx",
-        "cxxFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/.cxx",
+        "compilerSettingsCacheFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\.cxx",
+        "cxxFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\.cxx",
         "isBuildOnlyTargetAbiEnabled": true,
         "isCmakeBuildCohabitationEnabled": false,
         "isNativeCompilerSettingsCacheEnabled": false,
-        "rootBuildGradleFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication",
-        "sdkFolder": "/Users/nathanpollet/Library/Android/sdk",
+        "rootBuildGradleFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication",
+        "sdkFolder": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk",
         "isPrefabEnabled": false
       },
       "splitsAbiFilterSet": [],
       "stlSharedObjectMap": {
         "LIBCXX_SHARED": {
-          "ARMEABI_V7A": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
-          "ARM64_V8A": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
-          "X86": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
-          "X86_64": "/Users/nathanpollet/Library/Android/sdk/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+          "ARMEABI_V7A": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\arm-linux-androideabi\\libc++_shared.so",
+          "ARM64_V8A": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+          "X86": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\libc++_shared.so",
+          "X86_64": "C:\\Users\\91966\\AppData\\Local\\Android\\Sdk\\ndk\\21.0.6113669\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\x86_64-linux-android\\libc++_shared.so"
         },
         "LIBCXX_STATIC": {},
         "NONE": {},
         "SYSTEM": {}
       }
     },
-    "objFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/build/intermediates/cmake/release/obj",
+    "objFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\build\\intermediates\\cmake\\release\\obj",
     "variantName": "release",
     "validAbiList": [
       "ARMEABI_V7A",
       "X86"
     ],
-    "prefabDirectory": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/prefab",
+    "prefabDirectory": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\prefab",
     "prefabPackageDirectoryList": []
   },
-  "prefabFolder": "/Users/nathanpollet/Downloads/App_Code_Original_Roger2/WSApplication/openAL4Android/.cxx/cmake/release/prefab/x86"
+  "prefabFolder": "C:\\Users\\91966\\Desktop\\gitRepos\\visually_impaired\\Android_App\\WSApplication\\openAL4Android\\.cxx\\cmake\\release\\prefab\\x86"
 }
