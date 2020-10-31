@@ -214,7 +214,7 @@ class _CameraState extends State<Camera> {
                     });
                   }
 
-                  _temp = 4;
+                  //_temp = 4;
                   if (_temp > 4 && flag == 1) {
                     audioCache.play("continual.wav");
                   } else if (_temp <= 3 && flag == 1) {
