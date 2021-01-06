@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:testThesis/start_classification.dart';
 //import 'package:thesis/audio.dart';
 import 'home.dart';
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
         ),
-        home: HomePage(cameras));
+        home: StartClassification(cameras, "1"));
     //home: Audio(),
     //home: Scaffold(body: RaisedButton(onPressed: () {})));
   }

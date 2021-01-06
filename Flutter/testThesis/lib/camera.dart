@@ -8,7 +8,6 @@ import 'dart:math' as math;
 import 'package:all_sensors/all_sensors.dart';
 import 'package:flutter/services.dart';
 import "dart:async";
-import 'package:flutter/gestures.dart';
 
 var now = new List();
 var sub = new List();
@@ -24,11 +23,12 @@ class Camera extends StatefulWidget {
 
   final Callback setRecognitions;
   final String model;
+  int value;
 
-  Camera(this.cameras, this.model, this.setRecognitions);
+  Camera(this.cameras, this.model, this.setRecognitions, this.value);
 
   @override
-  _CameraState createState() => new _CameraState();
+  _CameraState createState() => new _CameraState(value);
 }
 
 double xt_pred = 4.0;
@@ -49,6 +49,7 @@ String text_orientation =
     "Correct heading determined, when you know it is safe begin " + "Crossing.";
 
 class _CameraState extends State<Camera> {
+  _CameraState(this.value);
   CameraController controller;
   bool isDetecting = false;
   AudioCache audioCache = AudioCache();
@@ -61,7 +62,7 @@ class _CameraState extends State<Camera> {
   bool _proximityValues = false;
   List<StreamSubscription<dynamic>> _streamSubscriptions =
       <StreamSubscription<dynamic>>[];
-
+  int value;
   int _counter = 0;
 
   static const platform = const MethodChannel('samples.flutter.dev/battery');
@@ -152,6 +153,11 @@ class _CameraState extends State<Camera> {
 
   @override
   void initState() {
+    _counter = 0;
+    flag = 0;
+    useModelCounter = 0;
+    print(
+        "flag value is:                                                                                           $flag");
     super.initState();
     _voiceController = FlutterTextToSpeech.instance.voiceController();
     _streamSubscriptions.add(gyroscopeEvents.listen((GyroscopeEvent event) {
@@ -177,6 +183,7 @@ class _CameraState extends State<Camera> {
 
         controller.startImageStream((CameraImage img) {
           if (!isDetecting) {
+            print("image height is : ${img.height}");
             isDetecting = true;
 
             int startTime = new DateTime.now().millisecondsSinceEpoch;
@@ -204,56 +211,80 @@ class _CameraState extends State<Camera> {
                 // print(
                 //     "On new page with battery level of :                $mInitX");
                 // print("Count is :        $useModelCounter");
-                if (useModelCounter < totalCount) {
-                  if (rotationSpeed > 30) {
-                    _voiceController.init().then((_) {
-                      _voiceController.speak(
-                        text,
-                        VoiceControllerOptions(),
-                      );
-                    });
-                  }
+                if (_counter < value) {
+                  _counter++;
+                  print("counter value is $_counter");
+                  // if (rotationSpeed > 30) {
+                  //   _voiceController.init().then((_) {
+                  //     _voiceController.speak(
+                  //       text,
+                  //       VoiceControllerOptions(),
+                  //     );
+                  //   });
+                  // }
+                }
+                if (_counter >= value) {
+                  _counter = 0;
+                  if (useModelCounter < totalCount) {
+                    // if (rotationSpeed > 30) {
+                    //   _voiceController.init().then((_) {
+                    //     _voiceController.speak(
+                    //       text,
+                    //       VoiceControllerOptions(),
+                    //     );
+                    //   });
+                    // }
 
-                  //_temp = 4;
-                  if (_temp > 4 && flag == 1) {
-                    audioCache.play("continual.wav");
-                  } else if (_temp <= 3 && flag == 1) {
-                    audioCache.play("continual_right.wav");
-                  } else if (_temp == 4) {
-                    if (_temp == 4) {
-                      useModelCounter++;
-                      //useModelCounter = 0; // in order to use the model only for predictions
-                    } else {
-                      useModelCounter = 0;
+                    //_temp = 4;
+                    if (_temp > 4 && _temp < 7 && flag == 1) {
+                      audioCache.play("continual.wav");
+                    } else if (_temp <= 3 && flag == 1) {
+                      audioCache.play("continual_right.wav");
+                    } else if (_temp == 7 && flag == 1) {
+                      audioCache.play("unknown.wav");
+                    } else if (_temp == 4) {
+                      if (_temp == 4) {
+                        useModelCounter++;
+                        //useModelCounter = 0; // in order to use the model only for predictions
+                      } else {
+                        useModelCounter = 0;
+                      }
                     }
                   }
-                }
-                if (useModelCounter >= totalCount) {
-                  if (flag == 1) {
-                    flag = 2;
-                    _getBatteryLevel();
-                    //_getBatteryLevelForMx();
-                    _voiceController.init().then((_) {
-                      _voiceController.speak(
-                        text_orientation,
-                        VoiceControllerOptions(),
-                      );
-                    });
-                  } else if (flag == 2) {
-                    Future.delayed(Duration(seconds: 4), () {
-                      flag = 3;
+                  if (useModelCounter >= totalCount) {
+                    if (flag == 1) {
+                      print(
+                          "I am inside flag where flag is 1. Now ideally the correct heading determined should be played");
+                      flag = 2;
+                      _getBatteryLevel();
                       //_getBatteryLevelForMx();
-                      print("minitX value is :               $_mX");
-                    });
-                  } else if (flag == 3) {
-                    _getBatteryLevelForMx();
-                    _mX = applyKalmanFilterForAngle(_mX);
-                    print("mX value is:  $_mX");
-                    _temp = obtainPredictionFromAngles();
-                    if (_temp < 0) {
-                      audioCache.play("continual.wav");
-                    } else if (_temp > 0) {
-                      audioCache.play("continual_right.wav");
+                      _voiceController.init().then((_) {
+                        _voiceController.speak(
+                          text_orientation,
+                          VoiceControllerOptions(),
+                        );
+                      });
+                      Future.delayed(Duration(seconds: 2), () {});
+                    } else if (flag == 2) {
+                      print(
+                          "I am inside where flag is 2. now the minitx sensor should be played and this noise os of minitx");
+                      Future.delayed(Duration(seconds: 4), () {
+                        flag = 3;
+                        _getBatteryLevelForMx();
+                        print("minitX value is :               $_mX");
+                      });
+                    } else if (flag == 3) {
+                      print(
+                          "I am inside where flag is 3. now the minitx sensor should be played and this noise os of minitx");
+                      //_getBatteryLevelForMx();
+                      _mX = applyKalmanFilterForAngle(_mX);
+                      print("mX value is:  $_mX");
+                      _temp = obtainPredictionFromAngles();
+                      if (_temp < 0) {
+                        audioCache.play("continual.wav");
+                      } else if (_temp > 0) {
+                        audioCache.play("continual_right.wav");
+                      }
                     }
                   }
                 }

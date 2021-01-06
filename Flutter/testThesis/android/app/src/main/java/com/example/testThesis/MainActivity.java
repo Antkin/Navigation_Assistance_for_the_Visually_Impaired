@@ -52,11 +52,14 @@ public class MainActivity extends FlutterActivity implements SensorEventListener
                             if (call.method.equals("getBatteryLevel")) {
                                 sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
                                 Sensor rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
-                                Sensor gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+                               Sensor gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+                               Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                                 if (gyroscope != null) {
-                                    sensorManager.registerListener(this, gyroscope,
-                                            SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+                                    // sensorManager.registerListener(this, gyroscope,
+                                    //         SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
                                 sensorManager.registerListener(MainActivity.this,rotationVector,SensorManager.SENSOR_DELAY_NORMAL);
+                                // sensorManager.registerListener(this, accelerometer,
+                                //             SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
                                 SensorManager.getOrientation(mRotationMatrix, mOrientationAngles);
                                 if (batteryLevel != -1) {
                                     result.success(batteryLevel);
@@ -73,23 +76,23 @@ public class MainActivity extends FlutterActivity implements SensorEventListener
 
     
 
-    private void getBatteryLevel() {
-        int batteryLevel = -1;
-        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-            /*BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-            batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);*/
-            sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            Sensor rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
-            sensorManager.registerListener(MainActivity.this,rotationVector,SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
-        } else {
-            Intent intent = new ContextWrapper(getApplicationContext()).
-                    registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            batteryLevel = (intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100) /
-                    intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-        }
+    // private void getBatteryLevel() {
+    //     int batteryLevel = -1;
+    //     if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+    //         /*BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+    //         batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);*/
+    //         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+    //         Sensor rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+    //         sensorManager.registerListener(MainActivity.this,rotationVector,SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+    //     } else {
+    //         Intent intent = new ContextWrapper(getApplicationContext()).
+    //                 registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    //         batteryLevel = (intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100) /
+    //                 intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+    //     }
 
-        //return batteryLevel;
-    }
+    //     //return batteryLevel;
+    // }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {

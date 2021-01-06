@@ -25,15 +25,18 @@ AudioPlayer advancedPlayer = AudioPlayer();
 
 class HomePage extends StatefulWidget {
   final List<CameraDescription> cameras;
+  int value;
 
-  HomePage(this.cameras);
+  HomePage(this.cameras, this.value);
   //print(cameras);
 
   @override
-  _HomePageState createState() => new _HomePageState();
+  _HomePageState createState() => new _HomePageState(value);
 }
 
 class _HomePageState extends State<HomePage> {
+  _HomePageState(this.value);
+  int value;
   VoiceController _voiceController;
   String text = "Indicates you should rotate right";
   String text_right = "Indicates you should rotate left";
@@ -57,43 +60,46 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _voiceController = FlutterTextToSpeech.instance.voiceController();
+    //_voiceController = FlutterTextToSpeech.instance.voiceController();
+    loadModel();
+    //  _voiceControllerRotate = FlutterTextToSpeech.instance.voiceController();
   }
 
   @override
   void dispose() {
     super.dispose();
     _voiceController.stop();
+    // _voiceControllerRotate.stop();
     for (StreamSubscription<dynamic> subscription in _streamSubscriptions) {
       subscription.cancel();
     }
   }
 
-  Future<void> _playVoice() {
-    //
-    return _voiceController.init().then((_) {
-      audioCache.play("continual.wav");
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        _voiceController.speak(
-          text,
-          VoiceControllerOptions(),
-        );
-      });
-      Future.delayed(const Duration(seconds: 3), () {
-        _voiceController.init().then((_) {
-          audioCache.play("continual_right.wav");
-          Future.delayed(const Duration(milliseconds: 1000), () {
-            advancedPlayer.stop();
-            _voiceController.speak(
-              text_right,
-              VoiceControllerOptions(),
-            );
-          });
-        });
-      });
-    });
-    //  });
-  }
+  // Future<void> _playVoice() {
+  //   //
+  //   return _voiceController.init().then((_) {
+  //     audioCache.play("continual.wav");
+  //     Future.delayed(const Duration(milliseconds: 1000), () {
+  //       _voiceController.speak(
+  //         text,
+  //         VoiceControllerOptions(),
+  //       );
+  //     });
+  //     Future.delayed(const Duration(seconds: 3), () {
+  //       _voiceController.init().then((_) {
+  //         audioCache.play("continual_right.wav");
+  //         Future.delayed(const Duration(milliseconds: 1000), () {
+  //           advancedPlayer.stop();
+  //           _voiceController.speak(
+  //             text_right,
+  //             VoiceControllerOptions(),
+  //           );
+  //         });
+  //       });
+  //     });
+  //   });
+  //   //  });
+  // }
 
   _stopVoice() {
     _voiceController.stop();
@@ -111,20 +117,20 @@ class _HomePageState extends State<HomePage> {
 
         break;
     }
-    print(res);
+    print("resuslt is $res");
   }
 
-  Future<void> _playRotation() {
-    Future.delayed(Duration(seconds: 7), () {
-      _voiceController.speak(
-        textRotate,
-        VoiceControllerOptions(),
-      );
-    });
-  }
+  // Future<void> _playRotation() {
+  //   _voiceController.init().then((_) {
+  //     _voiceController.speak(
+  //       textRotate,
+  //       VoiceControllerOptions(),
+  //     );
+  //   });
+  // }
 
   onSelect(model) {
-    Future.delayed(Duration(seconds: 16), () {
+    Future.delayed(Duration(seconds: 8), () {
       setState(() {
         _model = model;
       });
@@ -156,7 +162,13 @@ class _HomePageState extends State<HomePage> {
       _recognitions = recognitions;
       _imageHeight = imageHeight;
       _imageWidth = imageWidth;
+      print("heught is : $imageHeight");
+      print("width is: $imageWidth");
     });
+  }
+
+  void release() async {
+    await Tflite.close();
   }
 
   @override
@@ -171,56 +183,73 @@ class _HomePageState extends State<HomePage> {
     return Container(
         //quarterTurns: 1,
         child: Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(20.0),
-          child: AppBar(
-              centerTitle: true,
-              title: const Text('TFlite Real Time Classification'))),
-      body: _model == ""
-          ? Center(
-              child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ButtonTheme(
-                    child: RaisedButton(
-                      child: Text(ssd, style: TextStyle(fontSize: 25.0)),
-                      onPressed: () {
-                        //_playVoice();
-                        _getBatteryLevel();
-                        _playVoice();
-                        _playRotation();
-                        // onSelect(ssd);
-                        Future.delayed(Duration(seconds: 1), () {
-                          _getBatteryLevel();
-                          onSelect(ssd);
-                          print(
-                              "The battery level is:                                 $_batteryLevel");
-                        });
-                      },
-                    ),
-                  )
+            appBar: PreferredSize(
+                preferredSize: Size.fromHeight(20.0),
+                child: AppBar(
+                    centerTitle: true,
+                    title: const Text('TFlite Real Time Classification'))),
+            // body: _model == ""
+            //     ? Center(
+            //         child: Container(
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: <Widget>[
+            //             ButtonTheme(
+            //               child: RaisedButton(
+            //                 child: Text(ssd, style: TextStyle(fontSize: 25.0)),
+            //                 onPressed: () {
+            //                   //_playVoice();
+            //                   _playRotation();
+            //                   _getBatteryLevel();
+
+            //                   // onSelect(ssd);
+            //                   Future.delayed(Duration(seconds: 1), () {
+            //                     _getBatteryLevel();
+            //                     onSelect(ssd);
+            //                     print(
+            //                         "The battery level is:                                 $_batteryLevel");
+            //                   });
+            //                 },
+            //               ),
+            //             ),
+            //             RaisedButton(
+            //                 onPressed: () {
+            //                   _playVoice();
+            //                 },
+            //                 child: Text("Play Tutorial",
+            //                     style: TextStyle(fontSize: 25.0)))
+            //           ],
+            //         ),
+            //       ))
+            body: Column(children: <Widget>[
+              RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      Navigator.pop(context);
+                      //_model = "";
+                      // print("BUTTON CALLED . I DONNO WHAT TO DO NOW ");
+                      // release();
+                    });
+                  },
+                  child: Text("Stop")),
+              Expanded(
+                  child: Stack(
+                children: [
+                  // RotatedBox(
+                  //  quarterTurns: -1,
+                  Column(children: <Widget>[
+                    Camera(widget.cameras, _model, setRecognitions, value),
+                  ]),
+
+                  Render(
+                    _recognitions == null ? [] : _recognitions,
+                    math.max(_imageHeight, _imageWidth),
+                    math.min(_imageHeight, _imageWidth),
+                    screen.height,
+                    screen.width,
+                  ),
                 ],
-              ),
-            ))
-          : Stack(
-              children: [
-                // RotatedBox(
-                //  quarterTurns: -1,
-                Camera(
-                  widget.cameras,
-                  _model,
-                  setRecognitions,
-                ),
-                Render(
-                  _recognitions == null ? [] : _recognitions,
-                  math.max(_imageHeight, _imageWidth),
-                  math.min(_imageHeight, _imageWidth),
-                  screen.height,
-                  screen.width,
-                ),
-              ],
-            ),
-    ));
+              )),
+            ])));
   }
 }
