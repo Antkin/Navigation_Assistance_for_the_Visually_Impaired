@@ -33,6 +33,7 @@ class _StairwayState extends State<Stairway> {
   @override
   void initState() {
     super.initState();
+    loadModel();
   }
 
   @override
