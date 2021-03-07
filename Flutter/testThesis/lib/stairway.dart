@@ -62,10 +62,12 @@ class _StairwayState extends State<Stairway> {
   }
 
   onSelect(model){
-    setState(() {
-      _model = model;
+    Future.delayed(Duration(seconds: 8), () {
+      setState(() {
+        _model = model;
+      });
+      loadModel();
     });
-   loadModel();
   }
 
   void release() async {
