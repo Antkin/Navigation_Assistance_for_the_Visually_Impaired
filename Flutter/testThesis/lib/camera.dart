@@ -244,8 +244,8 @@ class _CameraState extends State<Camera> {
                       audioCache.play("unknown.wav");
                     } else if (_temp == 4) {
                       if (_temp == 4) {
-                        useModelCounter++;
-                        //useModelCounter = 0; // in order to use the model only for predictions
+                        //useModelCounter++;
+                        useModelCounter = 0; // in order to use the model only for predictions
                       } else {
                         useModelCounter = 0;
                       }

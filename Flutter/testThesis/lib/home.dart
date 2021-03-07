@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
     switch (_model) {
       default:
         res = await Tflite.loadModel(
-          model: "assets/mobilenet.tflite",
+          model: "assets/lite_model6.tflite",
           labels: "assets/labels.txt",
         );
 

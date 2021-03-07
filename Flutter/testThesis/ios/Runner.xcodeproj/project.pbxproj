@@ -16,6 +16,7 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		BC5ABB70BA6615E1907FAF84 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0986EAB643899B3D39021C14 /* Pods_Runner.framework */; };
 		D8A497BE257D441600EDC5AB /* tempFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A497BD257D441600EDC5AB /* tempFile.swift */; };
+		D8F134EE25D0A37300A45505 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F134ED25D0A37300A45505 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,7 @@
 		9CAA72AE242721F56E099524 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		D8A497BC257D441500EDC5AB /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		D8A497BD257D441600EDC5AB /* tempFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tempFile.swift; sourceTree = "<group>"; };
+		D8F134ED25D0A37300A45505 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC5ABB70BA6615E1907FAF84 /* Pods_Runner.framework in Frameworks */,
+				D8F134EE25D0A37300A45505 /* CoreMotion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +72,7 @@
 		2856FD190FF97C8C9792D746 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D8F134ED25D0A37300A45505 /* CoreMotion.framework */,
 				0986EAB643899B3D39021C14 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;

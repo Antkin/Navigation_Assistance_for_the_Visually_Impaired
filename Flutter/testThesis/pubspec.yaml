@@ -57,7 +57,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/labels.txt
-    - assets/mobilenet.tflite
+    - assets/lite_model6.tflite
     - assets/continual.wav
     - assets/continual_right.wav
     - assets/unknown.wav

@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:testThesis/drawer_for_page.dart';
 import 'package:testThesis/globals.dart';
 import 'package:testThesis/home.dart';
+import 'package:testThesis/bus_shelter.dart';
+import 'package:testThesis/stairway.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
 import 'package:flutter_text_to_speech/flutter_text_to_speech.dart';
@@ -195,6 +197,28 @@ class StartClassificationState extends State<StartClassification> {
                         print("value is: $values");
                       },
                       child: Text("Play Tutorial",
+                          style: TextStyle(fontSize: 25.0))),
+                  RaisedButton(
+                      onPressed: () {
+                        print("Bus Shelter detector!");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BusShelter(cameras, values)));
+                      },
+                      child: Text("Start Bus Shelter Detection",
+                          style: TextStyle(fontSize: 25.0))),
+                  RaisedButton(
+                      onPressed: () {
+                        print(" Stairway detector!");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Stairway(cameras, values)));
+                        },
+                      child: Text("Start Stairway Detection",
                           style: TextStyle(fontSize: 25.0)))
                 ],
               ),
