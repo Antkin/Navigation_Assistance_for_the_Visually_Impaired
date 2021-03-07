@@ -28,7 +28,7 @@ class Stairway extends StatefulWidget {
 class _StairwayState extends State<Stairway> {
   _StairwayState(this.value);
   int value;
-  String _model = "";
+  String _model = "assets/yolov2_graph.lite";
 
   @override
   void initState() {
@@ -47,8 +47,8 @@ class _StairwayState extends State<Stairway> {
       switch (_model) {
         default:
           res = await Tflite.loadModel(
-            model: "",
-            labels: "",
+            model: "assets/yolov2_graph.lite",
+            labels: "assets/label.txt",
           );
 
           break;
