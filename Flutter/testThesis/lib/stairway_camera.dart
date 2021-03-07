@@ -49,22 +49,23 @@ class _StairwayCameraState extends State<StairwayCamera> {
 
           int startTime = new DateTime.now().millisecondsSinceEpoch;
 
-          Tflite.runModelOnFrame(
+          Tflite.detectObjectOnFrame(
             bytesList: img.planes.map((plane) {
               return plane.bytes;
             }).toList(),
+            model: "YOLO",
+            numResultsPerClass: 1,
             imageHeight: img.height,
             imageWidth: img.width,
             imageMean: 127.5,
             imageStd: 127.5,
-            numResults: 3,
             rotation: 90,
             threshold:0.1)
           .then((recognitions) {
             recognitions.map((res) {});
 
             int endTime = new DateTime.now().millisecondsSinceEpoch;
-
+            print("DETECTED: $recognitions");
             //widget.setRecognitions(recognitions, img.height, img.width); //This updates the labels in the screen on the app
             isDetecting = false;
           });
