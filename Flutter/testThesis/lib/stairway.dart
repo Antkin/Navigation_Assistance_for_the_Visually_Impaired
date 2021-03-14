@@ -28,7 +28,11 @@ class Stairway extends StatefulWidget {
 class _StairwayState extends State<Stairway> {
   _StairwayState(this.value);
   int value;
+  List<dynamic> _recognitions;
+  int _imageHeight = 0;
+  int _imageWidth = 0;
   String _model = "assets/yolov2_graph.lite";
+
 
   @override
   void initState() {
@@ -39,6 +43,8 @@ class _StairwayState extends State<Stairway> {
   @override
   void dispose() {
     super.dispose();
+    //DO NOT CALL RELEASE
+    //release();
   }
 
   loadModel() async {
@@ -70,6 +76,24 @@ class _StairwayState extends State<Stairway> {
     });
   }
 
+  buildStairwayBox(recognitions, imageHeight, imageWidth){
+    if (!mounted) {
+      return;
+    }
+    if (recognitions.length == 0){
+      return;
+    }
+    setState((){
+      _recognitions = recognitions;
+      _imageHeight = imageHeight;
+      _imageWidth = imageWidth;
+    });
+
+    print("Class: "+_recognitions[0]["detectedClass"]);
+    print("Confidence: "+_recognitions[0]["confidenceInClass"].toString());
+    print("Rectangle Size: "+_recognitions[0]["rect"].toString());
+  }
+
   void release() async {
     await Tflite.close();
   }
@@ -97,7 +121,7 @@ class _StairwayState extends State<Stairway> {
               Expanded(
                   child: Stack(
                     children: [
-                      Column(children: <Widget>[StairwayCamera(widget.cameras, _model, value),
+                      Column(children: <Widget>[StairwayCamera(widget.cameras, _model, buildStairwayBox, value),
                       ]),
                     ],
                   )),

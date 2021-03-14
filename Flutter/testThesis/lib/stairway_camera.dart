@@ -9,12 +9,15 @@ import 'package:all_sensors/all_sensors.dart';
 import 'package:flutter/services.dart';
 import "dart:async";
 
+typedef void Callback(List<dynamic> list, int h, int w);
+
 class StairwayCamera extends StatefulWidget {
   final List<CameraDescription> cameras;
+  final Callback buildStairwayBox;
   final String model;
   int value;
 
-  StairwayCamera(this.cameras, this.model, this.value);
+  StairwayCamera(this.cameras, this.model, this.buildStairwayBox, this.value);
 
   @override
   _StairwayCameraState createState() => new _StairwayCameraState(value);
@@ -25,6 +28,7 @@ class _StairwayCameraState extends State<StairwayCamera> {
   CameraController controller;
   int value;
   bool isDetecting = false;
+
 
   @override
   void initState() {
@@ -44,7 +48,7 @@ class _StairwayCameraState extends State<StairwayCamera> {
 
       controller.startImageStream((CameraImage img) {
         if (!isDetecting){
-          print("Image height is : ${img.height}");
+          //print("Image height is : ${img.height}");
           isDetecting = true;
 
           int startTime = new DateTime.now().millisecondsSinceEpoch;
@@ -65,8 +69,8 @@ class _StairwayCameraState extends State<StairwayCamera> {
             recognitions.map((res) {});
 
             int endTime = new DateTime.now().millisecondsSinceEpoch;
-            print("DETECTED: $recognitions");
-            //widget.setRecognitions(recognitions, img.height, img.width); //This updates the labels in the screen on the app
+            //print("DETECTED: $recognitions");
+            widget.buildStairwayBox(recognitions, img.height, img.width); //This updates the labels in the screen on the app
             isDetecting = false;
           });
         }
