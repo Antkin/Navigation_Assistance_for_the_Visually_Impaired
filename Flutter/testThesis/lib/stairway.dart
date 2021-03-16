@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'camera.dart';
 import 'render.dart';
 import 'package:testThesis/stairway_camera.dart';
+import 'package:testThesis/bounding_box.dart';
 
 class Stairway extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -92,6 +93,8 @@ class _StairwayState extends State<Stairway> {
     print("Class: "+_recognitions[0]["detectedClass"]);
     print("Confidence: "+_recognitions[0]["confidenceInClass"].toString());
     print("Rectangle Size: "+_recognitions[0]["rect"].toString());
+    print("Test x: "+_recognitions[0]["rect"]["x"].toString());
+    print("");
   }
 
   void release() async {
@@ -123,6 +126,14 @@ class _StairwayState extends State<Stairway> {
                     children: [
                       Column(children: <Widget>[StairwayCamera(widget.cameras, _model, buildStairwayBox, value),
                       ]),
+
+                      BoundingBox(
+                        _recognitions,
+                        math.max(_imageHeight, _imageWidth),
+                        math.min(_imageHeight, _imageWidth),
+                        screen.height,
+                        screen.width,
+                      ),
                     ],
                   )),
             ])));
