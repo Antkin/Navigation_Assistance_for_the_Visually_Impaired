@@ -133,6 +133,7 @@ class _CameraState extends State<Camera> {
 
     setState(() {
       mInitX = result;
+      print("mInitX is: "+mInitX.toString());
     });
   }
 
@@ -148,6 +149,7 @@ class _CameraState extends State<Camera> {
 
     setState(() {
       _mX = result;
+      print("mX is: "+_mX.toString());
     });
   }
 

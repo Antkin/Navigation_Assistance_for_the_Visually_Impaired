@@ -13,13 +13,22 @@ class BoundingBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> _renderBoxes() {
-      return results.map((re) {
+      return results?.map((re) {
         var _x = re["rect"]["x"];
         var _w = re["rect"]["w"];
         var _y = re["rect"]["y"];
         var _h = re["rect"]["h"];
         var scaleW, scaleH, x, y, w, h;
 
+        //Get cam preview dimensions. Depends on screen size.
+        var camPrevW = screenW;
+        var camPrevH = screenW * (4/3);
+
+        x = _x * camPrevW;
+        w = _w * camPrevW;
+        y = _y * camPrevH;
+        h = _h * camPrevH;
+        /*
         if (screenH / screenW > previewH / previewW) {
           scaleW = screenH / previewH * previewW;
           scaleH = screenH;
@@ -40,6 +49,13 @@ class BoundingBox extends StatelessWidget {
           if (_y < difH / 2) h -= (difH / 2 - _y) * scaleH;
         }
 
+        print(screenH.toString());
+        print(screenW.toString());
+        print(previewH.toString());
+        print(previewW.toString());
+
+
+         */
         return Positioned(
           left: math.max(0, x),
           top: math.max(0, y),
@@ -63,7 +79,7 @@ class BoundingBox extends StatelessWidget {
             ),
           ),
         );
-      }).toList();
+      })?.toList() ?? [];
     }
 
     return Stack(

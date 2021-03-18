@@ -93,11 +93,13 @@ class _StairwayCameraState extends State<StairwayCamera> {
     var tmp = MediaQuery.of(context).size;
     var screenW = math.min(tmp.height, tmp.width);
     tmp = controller.value.previewSize;
+    //Screen height was previously 500, changed it to maintain same ratio as input images
+    var screenH = screenW * (4/3);
 
     return Container(
       child: CameraPreview(controller),
       constraints: BoxConstraints(
-        maxHeight: 500,
+        maxHeight: screenH,
         maxWidth: screenW,
       ),
     );

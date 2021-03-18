@@ -81,20 +81,26 @@ class _StairwayState extends State<Stairway> {
     if (!mounted) {
       return;
     }
+    /*
+    //This was removed to ensure that the bounding boxes dissapear when no detections are occuring
     if (recognitions.length == 0){
       return;
     }
+     */
     setState((){
       _recognitions = recognitions;
       _imageHeight = imageHeight;
       _imageWidth = imageWidth;
     });
 
+    /*
+    //Only prints with a valid recognition so be careful, will produce error on null recognitions arry
     print("Class: "+_recognitions[0]["detectedClass"]);
     print("Confidence: "+_recognitions[0]["confidenceInClass"].toString());
     print("Rectangle Size: "+_recognitions[0]["rect"].toString());
     print("Test x: "+_recognitions[0]["rect"]["x"].toString());
     print("");
+     */
   }
 
   void release() async {
