@@ -133,7 +133,7 @@ class _CameraState extends State<Camera> {
 
     setState(() {
       mInitX = result;
-      print("mInitX is: "+mInitX.toString());
+      //print("mInitX is: "+mInitX.toString());
     });
   }
 
@@ -149,7 +149,7 @@ class _CameraState extends State<Camera> {
 
     setState(() {
       _mX = result;
-      print("mX is: "+_mX.toString());
+      //print("mX is: "+_mX.toString());
     });
   }
 
@@ -208,6 +208,9 @@ class _CameraState extends State<Camera> {
               //print(applyKalmanFilterForPrediction(_temp));
               rotationSpeed = ((_gyroscopeValues[0] * 180.0) / math.pi).abs();
               //print("rotationspeed is: $rotationSpeed");
+              if (!mounted){
+                return;
+              }
               setState(() {
                 _getBatteryLevelForMx();
                 // print(
@@ -246,8 +249,8 @@ class _CameraState extends State<Camera> {
                       audioCache.play("unknown.wav");
                     } else if (_temp == 4) {
                       if (_temp == 4) {
-                        //useModelCounter++;
-                        useModelCounter = 0; // in order to use the model only for predictions
+                        useModelCounter++;
+                        //useModelCounter = 0; // in order to use the model only for predictions
                       } else {
                         useModelCounter = 0;
                       }

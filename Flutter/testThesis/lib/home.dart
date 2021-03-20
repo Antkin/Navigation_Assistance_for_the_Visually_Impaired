@@ -154,16 +154,20 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _batteryLevel = batteryLevel;
+      //print("In home, _getBatteryLevel() returned : "+_batteryLevel.toString());
     });
   }
 
   setRecognitions(recognitions, imageHeight, imageWidth) {
+    if (!mounted){
+      return;
+    }
     setState(() {
       _recognitions = recognitions;
       _imageHeight = imageHeight;
       _imageWidth = imageWidth;
-      print("heught is : $imageHeight");
-      print("width is: $imageWidth");
+      //print("heught is : $imageHeight");
+      //print("width is: $imageWidth");
     });
   }
 

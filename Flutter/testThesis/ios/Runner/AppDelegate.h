@@ -3,5 +3,5 @@
 #import <CoreMotion/CoreMotion.h>
 
 @interface AppDelegate : FlutterAppDelegate
-@property CMMotionManager *motion;
+@property CMMotionManager *motionManager;
 @end

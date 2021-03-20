@@ -16,20 +16,26 @@ double yaw = 0.0;
         //TODO IMPLEMENT HERE
         if ([@"getBatteryLevel" isEqualToString:call.method]) {
             int batteryLevel = [weakSelf getBatteryLevel];
-            self.motion = [[CMMotionManager alloc]init];
+            if (self.motionManager == nil){
+                //printf("Initializing motion manager in iOS Code!\n");
+                self.motionManager = [[CMMotionManager alloc] init];
+            }
             
-            if (self.motion.isDeviceMotionAvailable) {
-                if (self.motion.isDeviceMotionActive){
-                    yaw = self.motion.deviceMotion.attitude.yaw;
+            if (self.motionManager.isDeviceMotionAvailable) {
+                if (self.motionManager.isDeviceMotionActive){
+                    //printf("Inside active device motion ios code!.\n");
+                    yaw = self.motionManager.deviceMotion.attitude.yaw;
                     yaw = (yaw * 180.0)/3.1415;
                     result(@(yaw));
                 }
                 else{
-                    self.motion.deviceMotionUpdateInterval = 1.0 / 60;
-                    self.motion.showsDeviceMovementDisplay = false;
-                    self.motion.startDeviceMotionUpdates;
-                    
-                    yaw = self.motion.deviceMotion.attitude.yaw;
+                    //printf("Inside sensor setup ios code\n");
+                    self.motionManager.deviceMotionUpdateInterval = 1.0 / 60;
+                    self.motionManager.showsDeviceMovementDisplay = false;
+                    //self.motionManager.startDeviceMotionUpdates;
+                    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame: CMAttitudeReferenceFrameXArbitraryZVertical];
+                    //Returns yaw in radians, convert to deg
+                    yaw = self.motionManager.deviceMotion.attitude.yaw;
                     yaw = (yaw * 180.0)/3.1415;
                     //CMDeviceMotion *data = motion.deviceMotion;
                     //result(@(data.rotationRate.x));
@@ -49,10 +55,12 @@ double yaw = 0.0;
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
-
+//Returns updated yaw measurements once sensors are initialized
 - (double)getBatteryLevel {
-    if (self.motion.isDeviceMotionActive){
-        yaw = self.motion.deviceMotion.attitude.yaw;
+    //printf("inside get battery level function ios code\n");
+    if (self.motionManager.isDeviceMotionActive){
+       // printf("inside getbatterylevel activedevicemotion ios code\n");
+        yaw = self.motionManager.deviceMotion.attitude.yaw;
         yaw = (yaw * 180.0)/3.1415;
         return yaw;
     }
