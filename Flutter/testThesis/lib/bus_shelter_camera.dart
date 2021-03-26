@@ -9,11 +9,15 @@ import 'package:all_sensors/all_sensors.dart';
 import 'package:flutter/services.dart';
 import "dart:async";
 
+typedef void Callback(List<dynamic> list, int h, int w);
+
 class BusShelterCamera extends StatefulWidget {
   final List<CameraDescription> cameras;
+  final Callback buildBusShelterBox;
+  final String model;
   int value;
 
-  BusShelterCamera(this.cameras, this.value);
+  BusShelterCamera(this.cameras, this.model, this.buildBusShelterBox, this.value);
 
   @override
   _BusShelterCameraState createState() => new _BusShelterCameraState(value);
@@ -43,8 +47,31 @@ class _BusShelterCameraState extends State<BusShelterCamera> {
 
       controller.startImageStream((CameraImage img) {
         if (!isDetecting){
-          print("Image height is : ${img.height}");
-          //isDetecting = true;
+          //print("Image height is : ${img.height}");
+          isDetecting = true;
+
+          int startTime = new DateTime.now().millisecondsSinceEpoch;
+
+          Tflite.detectObjectOnFrame(
+              bytesList: img.planes.map((plane) {
+                return plane.bytes;
+              }).toList(),
+              model: "YOLO",
+              numResultsPerClass: 1,
+              imageHeight: img.height,
+              imageWidth: img.width,
+              imageMean: 127.5,
+              imageStd: 127.5,
+              rotation: 90,
+              threshold:0.1)
+              .then((recognitions) {
+            recognitions.map((res) {});
+
+            int endTime = new DateTime.now().millisecondsSinceEpoch;
+            //print("DETECTED: $recognitions");
+            widget.buildBusShelterBox(recognitions, img.height, img.width); //This updates the labels in the screen on the app
+            isDetecting = false;
+          });
         }
       });
     });
@@ -65,11 +92,14 @@ class _BusShelterCameraState extends State<BusShelterCamera> {
     var tmp = MediaQuery.of(context).size;
     var screenW = math.min(tmp.height, tmp.width);
     tmp = controller.value.previewSize;
+    //Screen height was previously 500, changed it to maintain same ratio as input images
+    var screenH = screenW * (4/3);
+
 
     return Container(
       child: CameraPreview(controller),
       constraints: BoxConstraints(
-        maxHeight: 500,
+        maxHeight: screenH,
         maxWidth: screenW,
       ),
     );

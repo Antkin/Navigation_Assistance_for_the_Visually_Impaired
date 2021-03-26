@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'camera.dart';
 import 'render.dart';
 import 'package:testThesis/bus_shelter_camera.dart';
+import 'package:testThesis/bounding_box.dart';
 
 class BusShelter extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -28,15 +29,65 @@ class BusShelter extends StatefulWidget {
 class _BusShelterState extends State<BusShelter> {
   _BusShelterState(this.value);
   int value;
+  List<dynamic> _recognitions;
+  int _imageHeight = 0;
+  int _imageWidth = 0;
+  String _model = "assets/yolov2_bs.lite";
 
   @override
   void initState() {
     super.initState();
+    loadModel();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  loadModel() async {
+    try{
+      String res;
+
+      switch (_model) {
+        default:
+          res = await Tflite.loadModel(
+            model: "assets/yolov2_bs.lite",
+            labels: "assets/labels_bs.txt",
+          );
+
+          break;
+      }
+      print("Result is $res");
+    }
+    on PlatformException{
+      print("Failed to load model.");
+    }
+  }
+
+  onSelect(model){
+    Future.delayed(Duration(seconds: 8), () {
+      setState(() {
+        _model = model;
+      });
+      loadModel();
+    });
+  }
+
+  buildBusShelterBox(recognitions, imageHeight, imageWidth){
+    if (!mounted){
+      return;
+    }
+
+    setState((){
+      _recognitions = recognitions;
+      _imageHeight = imageHeight;
+      _imageWidth = imageWidth;
+    });
+  }
+
+  void release() async {
+    await Tflite.close();
   }
 
   @override
@@ -62,8 +113,15 @@ class _BusShelterState extends State<BusShelter> {
           Expanded(
             child: Stack(
               children: [
-                Column(children: <Widget>[BusShelterCamera(widget.cameras, value),
+                Column(children: <Widget>[BusShelterCamera(widget.cameras, _model, buildBusShelterBox, value),
                 ]),
+                BoundingBox(
+                  _recognitions,
+                  math.max(_imageHeight, _imageWidth),
+                  math.min(_imageHeight, _imageWidth),
+                  screen.height,
+                  screen.width,
+                ),
               ],
             )),
         ])));
